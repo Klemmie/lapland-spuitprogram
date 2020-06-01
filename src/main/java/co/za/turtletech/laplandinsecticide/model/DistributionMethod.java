@@ -21,15 +21,20 @@ public class DistributionMethod {
     @Column(name = "date_ended")
     private LocalDate dateEnded;
 
+    @Column(name = "modified_by")
+    private String modifiedBy;
+
     public DistributionMethod() {
     }
 
-    public DistributionMethod(String distributionID, String name, int size, LocalDate dateAdded, LocalDate dateEnded) {
+    public DistributionMethod(String distributionID, String name, int size,
+                              LocalDate dateAdded, LocalDate dateEnded, String modifiedBy) {
         this.distributionID = distributionID;
         this.name = name;
         this.size = size;
         this.dateAdded = dateAdded;
         this.dateEnded = dateEnded;
+        this.modifiedBy = modifiedBy;
     }
 
     public String getDistributionID() {
@@ -70,5 +75,13 @@ public class DistributionMethod {
 
     public void setDateEnded(LocalDate date_ended) {
         this.dateEnded = date_ended;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
     }
 }

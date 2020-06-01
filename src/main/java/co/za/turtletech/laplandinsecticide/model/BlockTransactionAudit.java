@@ -4,12 +4,15 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
+
+import static javax.persistence.EnumType.STRING;
 
 @Entity
 @Table(name = "insecticide_block_transactions_audit")
 public class BlockTransactionAudit implements Serializable {
     @Id
-    private int ID;
+    private String ID;
 
     @Column
     private String blockID;
@@ -52,15 +55,18 @@ public class BlockTransactionAudit implements Serializable {
     @Column(name = "weather_condition")
     private String weatherCondition;
 
+    @Column(name = "modified_by")
+    private String modifiedBy;
+
     public BlockTransactionAudit() {
     }
 
-    public BlockTransactionAudit(String blockID, Users user,
-                                 InsecticideTransaction insecticideTransaction, Cultivar cultivar,
-                                 Users operator, DistributionMethod distributionMethod,
-                                 LocalDate dateOfApplication, LocalDateTime timeOfCompletion,
-                                 int insecticideUnitsUsed, String pestProblem,
-                                 LocalDate expectedHarvestDate, String weatherCondition) {
+    public BlockTransactionAudit(String ID, String blockID, Users user, InsecticideTransaction insecticideTransaction,
+                                 Cultivar cultivar, Users operator, DistributionMethod distributionMethod,
+                                 LocalDate dateOfApplication, LocalDateTime timeOfCompletion, int insecticideUnitsUsed,
+                                 String pestProblem, LocalDate expectedHarvestDate, String weatherCondition,
+                                 String modifiedBy) {
+        this.ID = ID;
         this.blockID = blockID;
         this.user = user;
         this.insecticideTransaction = insecticideTransaction;
@@ -73,6 +79,7 @@ public class BlockTransactionAudit implements Serializable {
         this.pestProblem = pestProblem;
         this.expectedHarvestDate = expectedHarvestDate;
         this.weatherCondition = weatherCondition;
+        this.modifiedBy = modifiedBy;
     }
 
     public String getBlockID() {
@@ -169,5 +176,13 @@ public class BlockTransactionAudit implements Serializable {
 
     public void setWeatherCondition(String weather_condition) {
         this.weatherCondition = weather_condition;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
     }
 }

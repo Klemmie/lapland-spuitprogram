@@ -24,16 +24,21 @@ public class Users {
     @Column(name = "date_ended")
     private LocalDate dateEnded;
 
+    @Column(name = "modified_by")
+    private String modifiedBy;
+
     public Users() {
     }
 
-    public Users(String userID, String username, String password, boolean isAdmin, LocalDate dateAdded, LocalDate dateEnded) {
+    public Users(String userID, String username, String password, boolean isAdmin,
+                 LocalDate dateAdded, LocalDate dateEnded, String modifiedBy) {
         this.userID = userID;
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
         this.dateAdded = dateAdded;
         this.dateEnded = dateEnded;
+        this.modifiedBy = modifiedBy;
     }
 
     public String getUserID() {
@@ -42,6 +47,14 @@ public class Users {
 
     public void setUserID(String user_ID) {
         this.userID = user_ID;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -74,5 +87,13 @@ public class Users {
 
     public void setDateEnded(LocalDate date_ended) {
         this.dateEnded = date_ended;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
     }
 }

@@ -21,15 +21,20 @@ public class Cultivar {
     @Column(name = "date_ended")
     private LocalDate dateEnded;
 
+    @Column(name = "modified_by")
+    private String modifiedBy;
+
     public Cultivar() {
     }
 
-    public Cultivar(String cultivarID, String cultivarName, String knownPests, LocalDate dateAdded, LocalDate dateEnded) {
+    public Cultivar(String cultivarID, String cultivarName, String knownPests,
+                    LocalDate dateAdded, LocalDate dateEnded, String modifiedBy) {
         this.cultivarID = cultivarID;
         this.cultivarName = cultivarName;
         this.knownPests = knownPests;
         this.dateAdded = dateAdded;
         this.dateEnded = dateEnded;
+        this.modifiedBy = modifiedBy;
     }
 
     public String getCultivarID() {
@@ -70,5 +75,13 @@ public class Cultivar {
 
     public void setDateEnded(LocalDate date_ended) {
         this.dateEnded = date_ended;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
     }
 }

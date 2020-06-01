@@ -19,14 +19,19 @@ public class InsecticideTransaction {
     @Column(name = "date_modified")
     private LocalDate dateModified;
 
+    @Column(name = "modified_by")
+    private String modifiedBy;
+
     public InsecticideTransaction() {
     }
 
-    public InsecticideTransaction(String insecticideTransactionsID, InsecticideDetails insecticideDetails, int unitsUsed, LocalDate dateModified) {
+    public InsecticideTransaction(String insecticideTransactionsID, InsecticideDetails insecticideDetails,
+                                  int unitsUsed, LocalDate dateModified, String modifiedBy) {
         this.insecticideTransactionsID = insecticideTransactionsID;
         this.insecticideDetails = insecticideDetails;
         this.unitsUsed = unitsUsed;
         this.dateModified = dateModified;
+        this.modifiedBy = modifiedBy;
     }
 
     public String getInsecticideTransactionsID() {
@@ -59,5 +64,13 @@ public class InsecticideTransaction {
 
     public void setDateModified(LocalDate date_modified) {
         this.dateModified = date_modified;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
     }
 }

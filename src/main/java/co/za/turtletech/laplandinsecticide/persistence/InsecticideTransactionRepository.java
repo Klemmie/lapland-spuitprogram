@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface InsecticideTransactionRepository extends JpaRepository<InsecticideTransaction, Long> {
-    List<InsecticideTransaction> findByInsecticideTransactionsID(String insecticideTransactionID);
+    InsecticideTransaction findByInsecticideTransactionsID(String insecticideTransactionID);
 
     List<InsecticideTransaction> findAll();
 }

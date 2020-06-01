@@ -97,7 +97,7 @@ public enum BlockTransactionEnum {
     BlockTransactionEnum(String guid) {
     }
 
-    private String toValue(BlockTransactionEnum blockTransactionEnum) {
+    public String toValue(BlockTransactionEnum blockTransactionEnum) {
         for (BlockTransactionEnum value : BlockTransactionEnum.values()) {
             if (blockTransactionEnum.equals(value))
                 return value.name();
@@ -105,7 +105,7 @@ public enum BlockTransactionEnum {
         return null;
     }
 
-    private BlockTransactionEnum toEnum(String guid) {
+    public BlockTransactionEnum toEnum(String guid) {
         for (BlockTransactionEnum value : BlockTransactionEnum.values()) {
             if (value.name().equals(guid))
                 return value;

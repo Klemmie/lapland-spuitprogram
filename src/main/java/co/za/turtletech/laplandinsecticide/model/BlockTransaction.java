@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "insecticide_block_transactions")
-public class BlockTransaction implements Serializable {
+public class BlockTransaction implements Serializable  {
     @Id
     private String blockID;
 
@@ -49,15 +49,17 @@ public class BlockTransaction implements Serializable {
     @Column(name = "weather_condition")
     private String weatherCondition;
 
+    @Column(name = "modified_by")
+    private String modifiedBy;
+
     public BlockTransaction() {
     }
 
-    public BlockTransaction(String blockID, Users user,
-                            InsecticideTransaction insecticideTransaction, Cultivar cultivar,
-                            Users operator, DistributionMethod distributionMethod,
-                            LocalDate dateOfApplication, LocalDateTime timeOfCompletion,
-                            int insecticideUnitsUsed, String pestProblem,
-                            LocalDate expectedHarvestDate, String weatherCondition) {
+    public BlockTransaction(String blockID, Users user, InsecticideTransaction insecticideTransaction,
+                            Cultivar cultivar, Users operator, DistributionMethod distributionMethod,
+                            LocalDate dateOfApplication, LocalDateTime timeOfCompletion, int insecticideUnitsUsed,
+                            String pestProblem, LocalDate expectedHarvestDate, String weatherCondition,
+                            String modifiedBy) {
         this.blockID = blockID;
         this.user = user;
         this.insecticideTransaction = insecticideTransaction;
@@ -70,6 +72,7 @@ public class BlockTransaction implements Serializable {
         this.pestProblem = pestProblem;
         this.expectedHarvestDate = expectedHarvestDate;
         this.weatherCondition = weatherCondition;
+        this.modifiedBy = modifiedBy;
     }
 
     public String getBlockID() {
@@ -166,5 +169,13 @@ public class BlockTransaction implements Serializable {
 
     public void setWeatherCondition(String weather_condition) {
         this.weatherCondition = weather_condition;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
     }
 }
