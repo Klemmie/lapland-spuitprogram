@@ -94,22 +94,21 @@ public enum BlockTransactionEnum {
     Maroela_23("4ddb01f6-0fc3-419f-8abb-7244a6b7a68f"),
     Maroela_24("50d6cfd6-1768-4ff2-8ea1-a57037671ab5");
 
-    BlockTransactionEnum(String guid) {
+    private final String label;
+
+    BlockTransactionEnum(String label) {
+        this.label = label;
     }
 
-    public String toValue(BlockTransactionEnum blockTransactionEnum) {
-        for (BlockTransactionEnum value : BlockTransactionEnum.values()) {
-            if (blockTransactionEnum.equals(value))
-                return value.name();
+    public static BlockTransactionEnum valueOfLabel(String label) {
+        for (BlockTransactionEnum b : values()) {
+            if (b.label.equals(label))
+                return b;
         }
         return null;
     }
 
-    public BlockTransactionEnum toEnum(String guid) {
-        for (BlockTransactionEnum value : BlockTransactionEnum.values()) {
-            if (value.name().equals(guid))
-                return value;
-        }
-        return null;
+    public String getLabel() {
+        return label;
     }
 }

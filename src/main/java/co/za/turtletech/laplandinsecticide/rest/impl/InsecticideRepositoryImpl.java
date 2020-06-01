@@ -68,7 +68,7 @@ public class InsecticideRepositoryImpl {
     }
 
     public void insertCurrentBlockTransaction(String userID, BlockTransaction blockTransaction) {
-        findBlockTransaction(userID, BlockTransactionEnum. blockTransaction.getBlockID())
+//        findBlockTransaction(userID, BlockTransactionEnum.toEnum(blockTransaction.getBlockID()))
         blockTransactionRepository.save(blockTransaction);
         logger.info("[" + userID + " added record: " + blockTransaction.getBlockID() +
                 " in BlockTransaction on: " + LocalDate.now().toString() + "]");
@@ -87,7 +87,7 @@ public class InsecticideRepositoryImpl {
     public BlockTransaction findBlockTransaction(String userID, String blockName) {
         logger.info("[" + userID + " retrieved record: " + blockName + " in BlockTransaction on: "
                 + LocalDate.now().toString() + "]");
-        return blockTransactionRepository.findByBlockID(BlockTransactionEnum.valueOf(blockName));
+        return blockTransactionRepository.findByBlockID(BlockTransactionEnum.valueOf(blockName).getLabel());
     }
 
     public List<BlockTransaction> allFarmTransactions(String userID) {
