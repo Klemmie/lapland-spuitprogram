@@ -1,16 +1,18 @@
 package co.za.turtletech.laplandinsecticide.model;
 
-public class SuccessResponse {
+public class FormattedResponse {
 
     private String ID;
     private int code;
+    private String message;
 
-    public SuccessResponse() {
+    public FormattedResponse() {
     }
 
-    public SuccessResponse(String ID, int code) {
+    public FormattedResponse(String ID, int code, String message) {
         this.ID = ID;
         this.code = code;
+        this.message = message;
     }
 
     public String getID() {
@@ -27,5 +29,13 @@ public class SuccessResponse {
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

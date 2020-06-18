@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface BlockTransactionAuditRepository extends JpaRepository<BlockTransactionAudit, Long> {
-    List<BlockTransactionAudit> findByBlockID(BlockTransactionEnum blockID);
+    List<BlockTransactionAudit> findByBlockID(String blockID);
 
     List<BlockTransactionAudit> findAll();
 }

@@ -63,55 +63,59 @@ public class InsecticideRepositoryImpl {
                 " in BlockTransactionAudit on: " + LocalDate.now().toString() + "]");
     }
 
-    public List<BlockTransactionAudit> blockTransactionHistory(BlockTransactionEnum blockID) {
+    public List<BlockTransactionAudit> blockTransactionHistory(String userId, String blockID) {
+        logger.info("[" + userId + " requested an audit trail on record: " + blockID
+                + " in BlockTransactionAudit on: " + LocalDate.now().toString() + "]");
         return blockTransactionAuditRepository.findByBlockID(blockID);
     }
 
-    public void insertCurrentBlockTransaction(String userID, BlockTransaction blockTransaction) {
+    public void insertCurrentBlockTransaction(String userId, BlockTransaction blockTransaction) {
 //        findBlockTransaction(userID, BlockTransactionEnum.toEnum(blockTransaction.getBlockID()))
         blockTransactionRepository.save(blockTransaction);
-        logger.info("[" + userID + " added record: " + blockTransaction.getBlockID() +
+        logger.info("[" + userId + " added record: " + blockTransaction.getBlockID() +
                 " in BlockTransaction on: " + LocalDate.now().toString() + "]");
     }
 
-    public void updateCurrentBlockTransaction(BlockTransaction blockTransaction) {
+    public void updateCurrentBlockTransaction(String userId, BlockTransaction blockTransaction) {
         insertTransactionToAudit(blockTransaction);
         blockTransactionRepository.delete(blockTransaction);
-        logger.info("[" + blockTransaction.getModifiedBy() + " removed record: " + blockTransaction.getBlockID() +
+        logger.info("[" + userId + " removed record: " + blockTransaction.getBlockID() +
                 " in BlockTransaction on: " + LocalDate.now().toString() + "]");
         blockTransactionRepository.save(blockTransaction);
-        logger.info("[" + blockTransaction.getModifiedBy() + " added record: " + blockTransaction.getBlockID() +
+        logger.info("[" + userId + " added record: " + blockTransaction.getBlockID() +
                 " in BlockTransaction on: " + LocalDate.now().toString() + "]");
     }
 
-    public BlockTransaction findBlockTransaction(String userID, String blockName) {
-        logger.info("[" + userID + " retrieved record: " + blockName + " in BlockTransaction on: "
+    public BlockTransaction findBlockTransaction(String userId, String blockName) {
+        logger.info("[" + userId + " retrieved record: " + blockName + " in BlockTransaction on: "
                 + LocalDate.now().toString() + "]");
         return blockTransactionRepository.findByBlockID(BlockTransactionEnum.valueOf(blockName).getLabel());
     }
 
-    public List<BlockTransaction> allFarmTransactions(String userID) {
-        logger.info("[" + userID + " retrieved all records in BlockTransaction on: " + LocalDate.now().toString() + "]");
+    public List<BlockTransaction> allFarmTransactions(String userId) {
+        logger.info("[" + userId + " retrieved all records in BlockTransaction on: " + LocalDate.now().toString() + "]");
         return blockTransactionRepository.findAll();
     }
 
-    public void insertCultivar(Cultivar cultivar) {
+    public Cultivar insertCultivar(String userId, Cultivar cultivar) {
         if (cultivar.getCultivarID() == null)
             cultivar.setCultivarID(UUID.randomUUID().toString());
         cultivarRepository.save(cultivar);
-        logger.info("[" + cultivar.getModifiedBy() + " added record: " + cultivar.getCultivarID() +
+        logger.info("[" + userId + " added record: " + cultivar.getCultivarID() +
                 " in Cultivar on: " + LocalDate.now().toString() + "]");
+        return cultivar;
     }
 
-    public int updateCultivar(Cultivar proposedCultivar) {
-        Cultivar currentCultivar = findCultivar(proposedCultivar.getCultivarName());
+    public int updateCultivar(String userId, String name, Cultivar proposedCultivar, boolean delete) {
+        Cultivar currentCultivar = findCultivar(userId, name);
         if (currentCultivar != null) {
             currentCultivar.setDateEnded(LocalDate.now());
 
             cultivarRepository.save(currentCultivar);
-            logger.info("[" + currentCultivar.getModifiedBy() + " updated record: " + currentCultivar.getCultivarID() +
+            logger.info("[" + userId + " updated record: " + currentCultivar.getCultivarID() +
                     " in Cultivar on: " + LocalDate.now().toString() + "]");
-            insertCultivar(proposedCultivar);
+            if (!delete)
+                insertCultivar(userId, proposedCultivar);
             return 1;
         } else
             return 0;
@@ -127,54 +131,59 @@ public class InsecticideRepositoryImpl {
         return activeCultivar;
     }
 
-    public Cultivar findCultivar(String cultivarName) {
+    public Cultivar findCultivar(String userId, String cultivarName) {
         Cultivar cultivar = cultivarRepository.findByCultivarName(cultivarName);
+        logger.info("[" + userId + " added record: " + cultivar.getCultivarID() + " in Cultivar on: "
+                + LocalDate.now().toString() + "]");
         if (cultivar.getDateEnded().isAfter(LocalDate.now()))
             return cultivar;
         else
             return null;
     }
 
-    public void insertInsecticideDetails(InsecticideDetails insecticideDetails) {
+    public InsecticideDetails insertInsecticideDetails(String userId, InsecticideDetails insecticideDetails) {
         if (insecticideDetails.getInsecticideDetailsID() == null)
             insecticideDetails.setInsecticideDetailsID(UUID.randomUUID().toString());
         insecticideDetailsRepository.save(insecticideDetails);
-        logger.info("[" + insecticideDetails.getModifiedBy() + " added record: " +
-                insecticideDetails.getInsecticideDetailsID() + " in InsecticideDetails on: "
-                + LocalDate.now().toString() + "]");
+        logger.info("[" + userId + " added record: " + insecticideDetails.getInsecticideDetailsID()
+                + " in InsecticideDetails on: " + LocalDate.now().toString() + "]");
+        return insecticideDetails;
     }
 
-    public int updateInsecticideDetails(InsecticideDetails insecticideDetails) {
-        InsecticideDetails currentInsecticideDetails = findInsecticideDetails(insecticideDetails.getStreetName());
+    public int updateInsecticideDetails(String userId, String name, InsecticideDetails insecticideDetails) {
+        InsecticideDetails currentInsecticideDetails = findInsecticideDetails(userId, name);
         if (currentInsecticideDetails != null) {
-            int deleted = deleteInsecticideDetail(insecticideDetails.getStreetName());
+            int deleted = deleteInsecticideDetail(userId, currentInsecticideDetails);
             if (deleted == 1) {
                 insecticideDetailsRepository.save(insecticideDetails);
-                logger.info("[" + insecticideDetails.getModifiedBy() + " updated record: " +
-                        insecticideDetails.getInsecticideDetailsID() + " in InsecticideDetails on: "
-                        + LocalDate.now().toString() + "]");
+                logger.info("[" + userId + " updated record: " + insecticideDetails.getInsecticideDetailsID()
+                        + " in InsecticideDetails on: " + LocalDate.now().toString() + "]");
                 return 1;
             } else return 0;
         } else return 0;
     }
 
-    public int deleteInsecticideDetail(String streetName) {
-        InsecticideDetails currentInsecticideDetails = findInsecticideDetails(streetName);
-        if (currentInsecticideDetails != null) {
-            currentInsecticideDetails.setDateEnded(LocalDate.now());
-            insecticideDetailsRepository.save(currentInsecticideDetails);
-            logger.info("[" + currentInsecticideDetails.getModifiedBy() + " ended record: " +
-                    currentInsecticideDetails.getInsecticideDetailsID() + " in InsecticideDetails on: "
+    public int deleteInsecticideDetail(String userId, InsecticideDetails insecticideDetails) {
+        if (insecticideDetails != null) {
+            insecticideDetails.setDateEnded(LocalDate.now());
+            insecticideDetails.setModifiedBy(userId);
+            insecticideDetailsRepository.save(insecticideDetails);
+            logger.info("[" + userId + " ended record: " +
+                    insecticideDetails.getInsecticideDetailsID() + " in InsecticideDetails on: "
                     + LocalDate.now().toString() + "]");
             return 1;
         } else return 0;
     }
 
-    public InsecticideDetails findInsecticideDetails(String streetName) {
+    public InsecticideDetails findInsecticideDetails(String userId, String streetName) {
         List<InsecticideDetails> insecticideDetailsList = insecticideDetailsRepository.findByStreetName(streetName);
         for (InsecticideDetails insecticideDetails : insecticideDetailsList) {
-            if (insecticideDetails.getDateEnded().isAfter(LocalDate.now()))
+            if (insecticideDetails.getDateEnded().isAfter(LocalDate.now())) {
+                logger.info("[" + userId + " ended record: " +
+                        insecticideDetails.getInsecticideDetailsID() + " in InsecticideDetails on: "
+                        + LocalDate.now().toString() + "]");
                 return insecticideDetails;
+            }
         }
         return null;
     }
